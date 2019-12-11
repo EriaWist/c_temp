@@ -4,7 +4,7 @@ struct tree {
     int key;             
     struct tree *left;  
     struct tree *right; 
-    struct tree *back;
+    struct tree *back;//test
 };
 typedef struct tree* treePtr;
 treePtr root = NULL;
