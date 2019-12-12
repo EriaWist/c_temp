@@ -1,5 +1,34 @@
 #include<stdio.h>
 #include<stdlib.h>
+#define MAX 100
+int isEmpty(int top)
+{
+	if(top==-1)
+	return 1;
+	else
+	return 0;
+}
+int isFull(int top)
+{
+	if(top>=MAX)
+	return 1;
+	else
+	return 0;
+}
+int pop(char stack[],int* top)
+{
+    if(isEmpty(*top))
+        printf("堆疊已空!\n");
+    else
+        return stack[(*top)--];
+}
+void push(char stack[],int* top,char item)
+{
+    if(isFull(*top))
+        printf("堆疊已滿!\n");
+    else
+        stack[++(*top)]=item;
+}
 struct tree {
     int key;             
     struct tree *left;  
@@ -67,6 +96,7 @@ void inorder(treePtr ptr)
 } 
 void inordertwo(treePtr ptr)
 {
+	char stark[100]={'/0'};
 	if(ptr==NULL)
 	{
 		return ;
