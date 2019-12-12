@@ -1,88 +1,84 @@
 #include<stdio.h>
-#include<stdlib.h>
-struct tree {
-    int key;             
-    struct tree *left;  
-    struct tree *right; 
-};
-typedef struct tree* treePtr;
-treePtr root = NULL;
-treePtr newNode(int n)
+#include<string.h>
+#define MAX 10
+int isEmpty(int top)
 {
-	treePtr ptr=root;
-	if(root==NULL)
-	{
-		root=(treePtr)malloc(sizeof(struct tree));
-		root->key=n;
-		root->left=NULL;
-		root->right=NULL;
-		return 0 ;
-	}
-	while(ptr!=NULL)
-	{
-		if(ptr->key<n)
-		{
-			if(ptr->left==NULL)
-			{
-				ptr->left=(treePtr)malloc(sizeof(struct tree));
-				ptr=ptr->left;
-				break;
-			}
-			ptr=ptr->left;
-		}
-		else if(ptr->key>n)
-		{
-			if(ptr->right==NULL)
-			{
-				ptr->right=(treePtr)malloc(sizeof(struct tree));
-				ptr=ptr->right;
-				break;
-			}
-			ptr=ptr->right;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-	ptr->key=n;
-	ptr->left=NULL;
-	ptr->right=NULL;
-	return ptr;
-} 
-int add(int n);
-void inorder(treePtr ptr)
+	if(top==-1)
+	return 1;
+	else
+	return 0;
+}
+int isFull(int top)
 {
-	if(ptr==NULL)
-	{
-		return ;
-	}
-	inorder(ptr->right);
-	printf("%d ",ptr->key);
-	inorder(ptr->left);
-} 
-void inordertwo(treePtr ptr)
+	if(top>=MAX)
+	return 1;
+	else
+	return 0;
+}
+int pop(char stack[],int* top)
 {
-	if(ptr==NULL)
-	{
-		return ;
-	}
-	printf("%d ",ptr->key);
-	inordertwo(ptr->right);
-	inordertwo(ptr->left);
+    if(isEmpty(*top))
+        printf("堆疊已空!\n");
+    else
+        return stack[(*top)--];
+}
+void push(char stack[],int* top,char item)
+{
+    if(isFull(*top))
+        printf("堆疊已滿!\n");
+    else
+        stack[++(*top)]=item;
+}
+int priority(char op) { 
+    switch(op) { 
+        case '+': case '-': return 12;
+        case '*': case '/': case '%': return 13;
+        default:            return 0;
+    } 
 } 
+void InToPostfix(char infix[], char postfix[])
+{ 
+    char stack[MAX];
+    
+    int i, j, top;
+    for(i=0;i<MAX;i++)
+    stack[i]='0';
+    top=-1;
+    for(i=0, j=0; i<strlen(infix); i++) 
+        switch(infix[i]) 
+        { 
+            case '(':  // 運算子堆疊 
+                /*  1. push infix[i] 至 stack 中 */
+                push(stack,&top,infix[i]);
+                break; 
+            case '+': case '-': case '*': case '/': 
+                while(priority(stack[top]) >= priority(infix[i])) {  // 比較優先權
+                    /*  2. 將 stack 中值 pop 出 存入 postfix[j++] 中*/
+                    postfix[j++]=pop(stack,&top);
+                } 
+                /*  2. push infix[i] 至 stack 中 */  //將該運算子加入堆疊
+                push(stack,&top,infix[i]);
+                break; 
+            case ')': 
+                while(stack[top] != '(') { // 遇 ) 輸出至 ( 
+                    /*  3. 將 stack 中值 pop 出 存入 postfix[j++] 中 */
+                   postfix[j++] = pop(stack,&top);
+                } 
+                /* 將 stack 中值 pop 出 */  // 不輸出 ( 
+                pop(stack,&top);
+                break; 
+            default:  // 運算元直接輸出 
+                postfix[j++] = infix[i];
+	    }
+    while(top>-1)  //將堆疊內所有運算元輸出
+        /*  5. 將 stack 中值 pop 出 存入 postfix[j++] 中 */
+        postfix[j++]=pop(stack,&top);
+} 
+
 int main()
 {
-	
-	int numb;
-	treePtr ptr;
-	while(1)
-	{
-		scanf("%d",&numb);
-			if(numb<0)
-		break;
-		newNode(numb);
-	
-	}
-	inordertwo(root);
+	char a[100],b[100];
+	scanf("%s",a);
+	InToPostfix(a,b);
+	printf("%s",b);
 } 
