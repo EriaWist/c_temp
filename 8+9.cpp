@@ -1,6 +1,14 @@
 #include<stdio.h>
 #include<stdlib.h>
 #define MAX 100
+struct tree {
+    int key;             
+    struct tree *left;  
+    struct tree *right; 
+    struct tree *back;//test
+};
+typedef struct tree* treePtr;
+treePtr root = NULL;
 int isEmpty(int top)
 {
 	if(top==-1)
@@ -15,28 +23,22 @@ int isFull(int top)
 	else
 	return 0;
 }
-int pop(char stack[],int* top)
+treePtr pop(treePtr stack[],int* top)
 {
     if(isEmpty(*top))
         printf("堆疊已空!\n");
     else
         return stack[(*top)--];
 }
-void push(char stack[],int* top,char item)
+void push(treePtr stack[],int* top,treePtr item)
 {
     if(isFull(*top))
         printf("堆疊已滿!\n");
     else
         stack[++(*top)]=item;
 }
-struct tree {
-    int key;             
-    struct tree *left;  
-    struct tree *right; 
-    struct tree *back;//test
-};
-typedef struct tree* treePtr;
-treePtr root = NULL;
+
+
 treePtr newNode(int n)
 {
 	treePtr ptr=root;
@@ -96,15 +98,18 @@ void inorder(treePtr ptr)
 } 
 void inordertwo(treePtr ptr)
 {
-	char stark[100]={'/0'};
-	if(ptr==NULL)
-	{
-		return ;
-	}
-	printf("%d ",ptr->key);
-	inordertwo(ptr->right);
-	inordertwo(ptr->left);
-} 
+	treePtr stark[100];
+	int top=-1;
+  for (;;) {
+  	     ptr= pop(stark,&top);  /* 自堆疊刪除節點 */
+     if (!ptr) break;  /* 空堆疊 */
+     printf("%d ", ptr->key);
+     for (; ptr; ptr = ptr->right)
+         push(stark,&top,ptr);  /* 將節點加入堆疊 */
+     ptr = ptr->left;
+  }
+}
+ 
 void del_inorder(int numb,treePtr ptr)
 {
 	if(ptr==NULL)
@@ -251,14 +256,14 @@ int main()
 		{
 			newNode(numb);
 			printf("\n");
-			inorder(root);
+			inordertwo(root);
 			printf("\n");
 		}
 		else if(n==2)
 		{
 			del(numb);
 			printf("\n");
-			inorder(root);
+			inordertwo(root);
 			printf("\n");
 		}
 		
