@@ -26,14 +26,14 @@ int isFull(int top)
 treePtr pop(treePtr stack[],int* top)
 {
     if(isEmpty(*top))
-        printf("°ïÅ|¤wªÅ!\n");
+        printf("Â°Ã¯Ã…|Â¤wÂªÃ…!\n");
     else
         return stack[(*top)--];
 }
 void push(treePtr stack[],int* top,treePtr item)
 {
     if(isFull(*top))
-        printf("°ïÅ|¤wº¡!\n");
+        printf("Â°Ã¯Ã…|Â¤wÂºÂ¡!\n");
     else
         stack[++(*top)]=item;
 }
@@ -101,12 +101,15 @@ void inordertwo(treePtr ptr)
 	treePtr stark[100];
 	int top=-1;
   for (;;) {
-  	     ptr= pop(stark,&top);  /* ¦Û°ïÅ|§R°£¸`ÂI */
-     if (!ptr) break;  /* ªÅ°ïÅ| */
-     printf("%d ", ptr->key);
+
      for (; ptr; ptr = ptr->right)
-         push(stark,&top,ptr);  /* ±N¸`ÂI¥[¤J°ïÅ| */
-     ptr = ptr->left;
+     {
+     	printf("%d ",ptr->key);
+     	 push(stark,&top,ptr);  /* Â±NÂ¸`Ã‚IÂ¥[Â¤JÂ°Ã¯Ã…| */
+	 }
+    ptr= pop(stark,&top);  /* Â¦Ã›Â°Ã¯Ã…|Â§RÂ°Â£Â¸`Ã‚I */
+    if (!ptr) break;  /* ÂªÃ…Â°Ã¯Ã…| */
+        ptr = ptr->left;
   }
 }
  
